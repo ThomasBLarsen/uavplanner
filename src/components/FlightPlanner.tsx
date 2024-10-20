@@ -12,6 +12,13 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { AlertCircle, Route } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Progress } from "@/components/ui/progress"
+import { FlightPlan } from '@/types';
+
+// FlightPlanner.tsx
+
+
+
+  
 
 const steps = [
   "Flight Details",
@@ -38,56 +45,35 @@ const drones = [
   { name: 'DJI Matrice 300 RTK', category: 'Specific', weight: 9000 },
 ]
 
-interface FlightPlan {
-  id: string | null;
-  date: string;
-  time: string;
-  duration: string;
-  operationType: string;
-  droneType: string;
-  operationDescription: string;
-  mapMode: string;
-  mapData: Array<{ lat: number; lng: number }>;
-  constraints: string[];
-  preFlightChecklist: string[];
-  postFlightChecklist: string[];
-  incidentOccurred: boolean;
-  incidentReport: string;
-  adminFeedback: string;
-  isPopulatedArea: boolean;
-  hasNonRGBSensors: boolean;
-  isOverProperty: boolean;
-  actualTime: string;
-  actualDuration: string;
-  status: string;
-}
 
 export function FlightPlanner({ isAdmin = false, initialPlan = null }: { isAdmin?: boolean; initialPlan?: FlightPlan | null }) {
   const [currentStep, setCurrentStep] = useState(0)
   const [flightStage, setFlightStage] = useState(initialPlan ? initialPlan.status : "Planning")
   const [flightPlan, setFlightPlan] = useState<FlightPlan>({
-    id: initialPlan ? initialPlan.id : null,
-    date: initialPlan ? initialPlan.date : '',
-    time: initialPlan ? initialPlan.time : '',
-    duration: '',
-    operationType: '',
-    droneType: '',
-    operationDescription: '',
-    mapMode: 'route',
-    mapData: [],
-    constraints: [],
-    preFlightChecklist: [],
-    postFlightChecklist: [],
-    incidentOccurred: false,
-    incidentReport: '',
-    adminFeedback: '',
-    isPopulatedArea: false,
-    hasNonRGBSensors: false,
-    isOverProperty: false,
-    actualTime: '',
-    actualDuration: '',
-    status: initialPlan ? initialPlan.status : "Planning",
-  })
+    id: initialPlan?.id || null,
+    date: initialPlan?.date || '',
+    time: initialPlan?.time || '',
+    duration: initialPlan?.duration || '',
+    status: initialPlan?.status || 'Planning',
+    pilotName: initialPlan?.pilotName || '',
+    incidentOccurred: initialPlan?.incidentOccurred || false,
+    incidentReport: initialPlan?.incidentReport || '',
+    adminFeedback: initialPlan?.adminFeedback || '',
+    isPopulatedArea: initialPlan?.isPopulatedArea || false,
+    hasNonRGBSensors: initialPlan?.hasNonRGBSensors || false,
+    isOverProperty: initialPlan?.isOverProperty || false,
+    actualTime: initialPlan?.actualTime || '',
+    actualDuration: initialPlan?.actualDuration || '',
+    operationType: initialPlan?.operationType || '',
+    droneType: initialPlan?.droneType || '',
+    operationDescription: initialPlan?.operationDescription || '',
+    mapMode: initialPlan?.mapMode || 'route',
+    mapData: initialPlan?.mapData || [],
+    constraints: initialPlan?.constraints || [],
+    preFlightChecklist: initialPlan?.preFlightChecklist || [],
+    postFlightChecklist: initialPlan?.postFlightChecklist || [],
+  });
+  
 
   useEffect(() => {
     if (initialPlan) {
@@ -138,7 +124,7 @@ const isDroneCompatible = (drone: Drone | undefined): boolean => {
     if (!flightPlan.operationType) return true;
     if (flightPlan.operationType === 'Specific') return drone.category === 'Specific';
     return drone.category <= flightPlan.operationType;
-};
+  };
 
   const renderStepContent = () => {
     switch (currentStep) {

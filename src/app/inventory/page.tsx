@@ -79,9 +79,9 @@ const columns: ColumnDef<InventoryItem>[] = [
       }
       return (
         <div className="flex items-center">
-          <Badge variant={color === "green" ? "default" : color === "yellow" ? "warning" : "destructive"}>
-            {days} days
-          </Badge>
+            <Badge variant={color === "green" ? "default" : color === "yellow" ? "outline" : "destructive"}>
+                {days} days
+            </Badge>
           <div className={`ml-2 h-3 w-3 rounded-full bg-${color}-500`}></div>
         </div>
       )
