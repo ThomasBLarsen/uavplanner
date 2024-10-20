@@ -9,7 +9,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
-import { AlertCircle, MapPin, Route } from 'lucide-react'
+import { AlertCircle, Route } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Progress } from "@/components/ui/progress"
 
@@ -38,10 +38,34 @@ const drones = [
   { name: 'DJI Matrice 300 RTK', category: 'Specific', weight: 9000 },
 ]
 
-export function FlightPlanner({ isAdmin = false, initialPlan = null }) {
+interface FlightPlan {
+  id: string | null;
+  date: string;
+  time: string;
+  duration: string;
+  operationType: string;
+  droneType: string;
+  operationDescription: string;
+  mapMode: string;
+  mapData: Array<{ lat: number; lng: number }>;
+  constraints: string[];
+  preFlightChecklist: string[];
+  postFlightChecklist: string[];
+  incidentOccurred: boolean;
+  incidentReport: string;
+  adminFeedback: string;
+  isPopulatedArea: boolean;
+  hasNonRGBSensors: boolean;
+  isOverProperty: boolean;
+  actualTime: string;
+  actualDuration: string;
+  status: string;
+}
+
+export function FlightPlanner({ isAdmin = false, initialPlan = null }: { isAdmin?: boolean; initialPlan?: FlightPlan | null }) {
   const [currentStep, setCurrentStep] = useState(0)
   const [flightStage, setFlightStage] = useState(initialPlan ? initialPlan.status : "Planning")
-  const [flightPlan, setFlightPlan] = useState({
+  const [flightPlan, setFlightPlan] = useState<FlightPlan>({
     id: initialPlan ? initialPlan.id : null,
     date: initialPlan ? initialPlan.date : '',
     time: initialPlan ? initialPlan.time : '',
@@ -62,6 +86,7 @@ export function FlightPlanner({ isAdmin = false, initialPlan = null }) {
     isOverProperty: false,
     actualTime: '',
     actualDuration: '',
+    status: initialPlan ? initialPlan.status : "Planning",
   })
 
   useEffect(() => {
@@ -102,11 +127,18 @@ export function FlightPlanner({ isAdmin = false, initialPlan = null }) {
     setFlightStage("Submitted")
   }
 
-  const isDroneCompatible = (drone) => {
-    if (!flightPlan.operationType) return true
-    if (flightPlan.operationType === 'Specific') return drone.category === 'Specific'
-    return drone.category <= flightPlan.operationType
-  }
+interface Drone {
+    name: string;
+    category: string;
+    weight: number;
+}
+
+const isDroneCompatible = (drone: Drone | undefined): boolean => {
+    if (!drone) return false;
+    if (!flightPlan.operationType) return true;
+    if (flightPlan.operationType === 'Specific') return drone.category === 'Specific';
+    return drone.category <= flightPlan.operationType;
+};
 
   const renderStepContent = () => {
     switch (currentStep) {

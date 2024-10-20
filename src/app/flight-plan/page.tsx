@@ -9,19 +9,41 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { FlightPlanner } from "@/components/FlightPlanner"
 
 // Mock data for flight plans
-const mockFlightPlans = [
-  { id: 1, date: '2023-07-01', time: '10:00', status: 'Completed', pilotName: 'John Doe' },
-  { id: 2, date: '2023-07-05', time: '14:30', status: 'Approved', pilotName: 'Jane Smith' },
-  { id: 3, date: '2023-07-10', time: '09:00', status: 'Submitted', pilotName: 'Mike Johnson' },
-  { id: 4, date: '2023-07-15', time: '11:00', status: 'Rejected', pilotName: 'Sarah Williams' },
-  { id: 5, date: '2023-07-20', time: '16:00', status: 'Planning', pilotName: 'Chris Brown' },
-]
 
 export default function FlightPlans() {
-  const [isAdmin, setIsAdmin] = useState(false)
-  const [selectedPlan, setSelectedPlan] = useState(null)
+  const [isAdmin] = useState(false)
+  const [selectedPlan, setSelectedPlan] = useState<FlightPlan | null>(null)
 
-  const getStatusColor = (status) => {
+  type FlightPlan = {
+    id: string;
+    date: string;
+    time: string;
+    status: string;
+    pilotName: string;
+    incidentOccurred: boolean;
+    incidentReport: string;
+    adminFeedback: string;
+    isPopulatedArea: boolean;
+    hasNonRGBSensors: boolean;
+    isOverProperty: boolean;
+    actualTime: string;
+    actualDuration: string;
+    duration: string;
+    operationType: string;
+    droneType: string;
+    operationDescription: string;
+    [key: string]: any; // To allow any additional properties
+  };
+
+  const mockFlightPlans: FlightPlan[] = [
+      { id: '1', date: '2023-07-01', time: '10:00', status: 'Completed', pilotName: 'John Doe', incidentOccurred: false, incidentReport: '', adminFeedback: '', isPopulatedArea: false, hasNonRGBSensors: false, isOverProperty: false, actualTime: '', actualDuration: '', duration: '1h', operationType: 'Survey', droneType: 'Quadcopter', operationDescription: 'Routine survey' },
+      { id: '2', date: '2023-07-05', time: '14:30', status: 'Approved', pilotName: 'Jane Smith', incidentOccurred: false, incidentReport: '', adminFeedback: '', isPopulatedArea: false, hasNonRGBSensors: false, isOverProperty: false, actualTime: '', actualDuration: '', duration: '2h', operationType: 'Inspection', droneType: 'Hexacopter', operationDescription: 'Building inspection' },
+      { id: '3', date: '2023-07-10', time: '09:00', status: 'Submitted', pilotName: 'Mike Johnson', incidentOccurred: false, incidentReport: '', adminFeedback: '', isPopulatedArea: false, hasNonRGBSensors: false, isOverProperty: false, actualTime: '', actualDuration: '', duration: '1.5h', operationType: 'Mapping', droneType: 'Quadcopter', operationDescription: 'Area mapping' },
+      { id: '4', date: '2023-07-15', time: '11:00', status: 'Rejected', pilotName: 'Sarah Williams', incidentOccurred: false, incidentReport: '', adminFeedback: '', isPopulatedArea: false, hasNonRGBSensors: false, isOverProperty: false, actualTime: '', actualDuration: '', duration: '3h', operationType: 'Survey', droneType: 'Octocopter', operationDescription: 'Detailed survey' },
+      { id: '5', date: '2023-07-20', time: '16:00', status: 'Planning', pilotName: 'Chris Brown', incidentOccurred: false, incidentReport: '', adminFeedback: '', isPopulatedArea: false, hasNonRGBSensors: false, isOverProperty: false, actualTime: '', actualDuration: '', duration: '2h', operationType: 'Inspection', droneType: 'Quadcopter', operationDescription: 'Preliminary inspection' },
+  ]
+
+  const getStatusColor = (status: string): string => {
     switch (status) {
       case 'Completed': return 'bg-green-500'
       case 'Approved': return 'bg-blue-500'

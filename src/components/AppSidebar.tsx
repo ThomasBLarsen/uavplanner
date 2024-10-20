@@ -59,7 +59,7 @@ export function AppSidebar() {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
               <DropdownMenuLabel>Switch Team</DropdownMenuLabel>
-              {teams.map((team, index) => (
+              {teams.map((team) => (
                 <DropdownMenuItem key={team.name} onClick={() => setActiveTeam(team)}>
                   <team.logo className="mr-2 h-4 w-4" />
                   <span>{team.name}</span>

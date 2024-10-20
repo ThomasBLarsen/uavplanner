@@ -104,7 +104,7 @@ export default function ReviewFlightPlansPage() {
       case 'pending':
         return <Badge variant="outline">Pending</Badge>
       case 'approved':
-        return <Badge variant="success">Approved</Badge>
+        return <Badge variant="default">Approved</Badge>
       case 'rejected':
         return <Badge variant="destructive">Rejected</Badge>
     }

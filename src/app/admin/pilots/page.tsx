@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { AlertCircle, CheckCircle, Edit, Trash2, UserPlus } from "lucide-react"
+import { AlertCircle, Edit, Trash2, UserPlus } from "lucide-react"
 import {
   Dialog,
   DialogContent,
@@ -104,18 +104,18 @@ export default function PilotAdminPage() {
   }
 
   const getCertificationStatus = (expirationDate: string) => {
-    const today = new Date()
-    const expDate = new Date(expirationDate)
-    const daysUntilExpiration = Math.ceil((expDate.getTime() - today.getTime()) / (1000 * 3600 * 24))
-
-    if (daysUntilExpiration <= 0) {
-      return { status: 'expired', color: 'destructive' as const }
-    } else if (daysUntilExpiration <= 30) {
-      return { status: 'expiring soon', color: 'warning' as const }
-    } else {
-      return { status: 'valid', color: 'success' as const }
+      const today = new Date()
+      const expDate = new Date(expirationDate)
+      const daysUntilExpiration = Math.ceil((expDate.getTime() - today.getTime()) / (1000 * 3600 * 24))
+  
+      if (daysUntilExpiration <= 0) {
+        return { status: 'expired', color: 'destructive' as const }
+      } else if (daysUntilExpiration <= 30) {
+        return { status: 'expiring soon', color: 'outline' as const }
+      } else {
+        return { status: 'valid', color: 'default' as const }
+      }
     }
-  }
 
   return (
     <Card className="w-full">
@@ -136,7 +136,7 @@ export default function PilotAdminPage() {
               <DialogHeader>
                 <DialogTitle>Add New Pilot</DialogTitle>
                 <DialogDescription>
-                  Enter the details of the new pilot. Click save when you're done.
+                  Enter the details of the new pilot. Click save when you`&aposre done.
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
